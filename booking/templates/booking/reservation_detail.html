@@ -1,0 +1,54 @@
+{% extends 'core/base.html' %}
+{% load extras %}
+{% block title %}Reserva{% endblock %}
+{% block content %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <span class="navbar-brand" href="#"><i>Reserva del {{ reservation.check_in }} al {{ reservation.check_out }} - Noches: {{ reservation.total_nights }}</i></span>
+        <a href="{% url 'booking:pdf' reservation.id %}" target="_blank" class="btn btn-danger ml-4"><i class="fa fa-file-pdf-o"></i></a>
+    </div>
+</nav>
+<div class="container">
+    <div class="row justify-content-center">
+        <table class="table">
+            <tr>
+                <td>Localizador</td>
+                <td>{{ reservation.number }}
+                </td>
+            </tr>
+            <tr>
+                <td>Habitación</td>
+                <td>{{ reservation.room.number }}</td>
+            </tr>
+            <tr>
+                <td>Tipo</td>
+                <td>{{ reservation.room.type }}</td>
+            </tr>
+            <tr>
+                <td>Equipamiento</td>
+                <td>
+                {% for facility in reservation.room.facilities.all %}
+                {{ facility }}{% if not forloop.last %},{% endif %}
+                {% endfor %}
+                </td>
+            </tr>
+            {% if reservation.comments %}
+            <tr>
+                <td>Comentarios</td>
+                <td>{{ reservation.comments|linebreaks }}</td>
+            </tr>
+            {% endif %}
+            <tr>
+                <td>Precio por noche</td>
+                <td>€{{ reservation.room.price }}</td>
+            </tr>
+            <tfoot>
+                <tr>
+                    <td><b>Total reserva</b></td>
+                    <td><b>€{{ reservation.total }}</b></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+{% endblock %}

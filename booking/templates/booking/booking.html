@@ -1,0 +1,49 @@
+{% extends 'core/base.html' %}
+{% load extras %}
+{% block title %}Habitaciones disponibles{% endblock %}
+{% block content %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <span class="navbar-brand" href="#"><i>Habitaciones disponibles del {{ check_in }} al {{ check_out }} - Noches: {{ nights }}</i></span>
+    </div>
+</nav>
+<main role="main">
+    <div class="row justify-content-center">
+        <div class="col col-md-auto">
+            {% if rooms %}
+            <table class="table">
+                <thead class="thead-dark">
+                <tr>
+                    <th>Número</th>
+                    <th>Tipo</th>
+                    <th>Equipamiento</th>
+                    <th>Precio por noche</th>
+                    <th>Total estancia</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+        {% for room in rooms %}
+                <tr>
+                    <td>{{ room.number }}</td>
+                    <td>{{ room.type }}</td>
+                    <td><ul>
+                        {% for facility in room.facilities.all %}
+                        <li>{{ facility }}</li>
+                        {% endfor %}
+                        </ul>
+                    </td>
+                    <td class="text-right">€{{ room.price }}</td>
+                    <td class="text-right">€{{ room.price|total_price:nights }}</td>
+                    <td><p><a href="{% url 'booking:reservation' room.id check_in check_out %}">Reservar</a></p></td>
+                </tr>
+        {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <h5>No hay habitaciones disponibles para las fechas seleccionadas</h5>
+            {% endif %}
+        </div>
+    </div>
+</main>
+{% endblock %}

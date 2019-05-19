@@ -1,0 +1,56 @@
+{% extends 'core/base.html' %}
+{% block title %}Reservar{% endblock %}
+{% load extras %}
+{% block content %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <span class="navbar-brand" href="#"><i>Reserva del {{ check_in }} al {{ check_out }} - Noches: {{ nights }}</i></span><br/>
+    </div>
+</nav>
+<main role="main">
+    <div class="container">
+        <div class="row mt-3 mb-5">
+            <div class="col-md-9 mx-auto mb-3">
+                <h5><b>Detalle de la reserva</b></h5>
+                <table class="table">
+                    <tr>
+                        <td>Habitación</td>
+                        <td>{{ room.number }}</td>
+                    </tr>
+                    <tr>
+                        <td>Tipo</td>
+                        <td>{{ room.type }}</td>
+                    </tr>
+                    <tr>
+                        <td>Equipamiento</td>
+                        <td>
+                        {% for facility in room.facilities.all %}
+                        {{ facility }}{% if not forloop.last %},{% endif %}
+                        {% endfor %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Precio por noche</td>
+                        <td>€{{ room.price }}</td>
+                    </tr>
+                    <tfoot>
+                        <tr>
+                            <td><b>Total reserva</b></td>
+                            <td><b>€{{ room.price|total_price:nights }}</b></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <div class="col-md-9 mx-auto mt-3">
+                <h6><b>Por favor, complete los siguientes datos para finalizar la reserva de la habitación:</b></h6>
+                <form method="post">{% csrf_token %}
+                    {{ form.as_p }}
+                    <div class="text-center">
+                        <input type="submit" class="btn btn-primary btn-block" value="Finalizar reserva" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

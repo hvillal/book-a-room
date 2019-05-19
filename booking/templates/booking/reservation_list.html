@@ -1,0 +1,32 @@
+{% extends 'core/base.html' %}
+{% load extras %}
+{% block title %}Mis reservas{% endblock %}
+{% block content %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <span class="navbar-brand" href="#"><i>Mis reservas</i></span>
+    </div>
+</nav>
+<main role="main">
+    <div class="container mb-4">
+    {% if reservation_list %}
+    {% for reservation in reservation_list|dictsort:"id" reversed %}
+        <div class="row mt-3">
+            <div class="col-md-9 mx-auto">
+                <h2 class="mb-4">Del {{ reservation.check_in|date:"SHORT_DATE_FORMAT" }} al {{ reservation.check_out|date:"SHORT_DATE_FORMAT" }}</h2>
+                <div>
+                    <p>{{ reservation.room }} ({{ reservation.room.type }})</p>
+                    {% if reservation.comments %}
+                    <p>{{ reservation.comments|striptags|safe|truncatechars:"200" }}</p>
+                    {% endif %}
+                    <p><a href="{% url 'booking:detail' reservation.id %}">Detalle</a></p>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    {% else %}
+        <h2 class="mb-4">No tiene ninguna reserva registrada</h2>
+    {% endif %}
+    </div>
+</main>
+{% endblock %}

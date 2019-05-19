@@ -1,0 +1,46 @@
+{% extends 'core/base.html' %}
+{% block title %}Inicio{% endblock %}
+{% block content %}
+{{ form.media }}
+  <div class="container">
+    <div class="container">
+        <div class="container mb-5 mt-5">
+            <h3 class="display-4 text-muted d-block text-center">Buscador de habitaciones</h3>
+            <p class="lead text-center">Selecciona las fechas de llegada y salida</p>
+        </div>
+    </div>
+    <div class="container">
+        <form method="get" action="{% url 'booking:booking' %}">
+        <div class="card-deck mb-3 text-center">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">Llegada</h4>
+                </div>
+                <div class="card-body">
+                    {{ form.check_in }}
+                    {{ form.check_in.errors }}
+                </div>
+            </div>
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">Salida</h4>
+                </div>
+                <div class="card-body">
+                    {{ form.check_out }}
+                    {{ form.check_out.errors }}
+                </div>
+            </div>
+        </div>
+       <p><input type="submit" class="btn btn-success btn-block" value="Buscar habitaciones disponibles"></p>
+        </form>
+    </div>
+  </div>
+<script>
+$('form').submit(function(e){
+    if($("#id_check_out").val() <= $("#id_check_in").val()){
+        e.preventDefault();
+        alert("Fecha de salida debe ser posterior a la fecha de llegada");
+    }
+});
+</script>
+{% endblock %}
